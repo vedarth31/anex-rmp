@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate My Professor</title>
+</head>
+<body>
+    <h1>Rate My Professor</h1>
+
+    <form id="professorForm">
+        <label for="profName">Professor Name:</label>
+        <input type="text" id="profName" name="profName" required>
+        <button type="button" onclick="getProfessorInfo()">Get Info</button>
+    </form>
+
+    <div id="resultContainer"></div>
+
+    <script>
+        function getProfessorInfo() {
+            const profName = document.getElementById('profName').value;
+
+            // Make a POST request to your Flask app
+            fetch('http://127.0.0.1:5000/get_professor_info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prof_name: profName }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response data
+                displayResult(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function displayResult(data) {
+            const resultContainer = document.getElementById('resultContainer');
+
+            if (data.error) {
+                resultContainer.innerHTML = `<p>Error: ${data.error}</p>`;
+            } else {
+                resultContainer.innerHTML = `
+                    <p>${data.name} works in the ${data.department} Department of ${data.school}.</p>
+                    <p>Rating: ${data.rating} / 5.0</p>
+                    <p>Difficulty: ${data.difficulty} / 5.0</p>
+                    <p>Total Ratings: ${data.num_ratings}</p>
+                    <p>Would Take Again: ${data.would_take_again !== null ? `${data.would_take_again}%` : 'N/A'}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
