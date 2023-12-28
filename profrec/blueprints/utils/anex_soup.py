@@ -1,5 +1,6 @@
 import requests
 from json import loads
+import ratemyprofessor
 
 url = "https://anex.us/grades/getData/"
 
@@ -9,9 +10,8 @@ def changeProfName(old_name):
     return new_name.upper()
     
 def parseData(data, prof_input):
-    # name = changeProfName(prof_input)
-    name = prof_input
-    # print(json_response)
+    name = changeProfName(prof_input)
+    # name = prof_input
     parsed_data = {}
     for class_info in data['classes']:
         prof = class_info['prof']
@@ -55,30 +55,42 @@ def percent_letter_grades(data, semester):
     
     grades = [total_as, total_bs, total_cs, total_ds, total_fs]
     
-    # percents = []
-    # for grade in grades:
-    #     percents.append(round(grade/total_students * 100, 2))
-        
-    #high caste way of code i wrote above
     return [round(grade/total_students * 100, 2) for grade in grades]
 
+def get_professor_info(user_input):
+    # data = request.get_json()
+    # print(f"{data}")
+    prof_name = user_input['professor']
+    # prof_name = "Amy Austin"
 
-def outputData(data, prof_input):
+    professor = ratemyprofessor.get_professor_by_school_and_name(
+        ratemyprofessor.get_school_by_name("Texas A&M University"), prof_name)
+
+    if professor is not None:
+        if (professor.school.name == "Texas A&M University" or professor.school.name == "Texas A&M University at College Station"):
+            response_data = {
+                "rating": professor.rating,
+                "difficulty": professor.difficulty,
+                "num_ratings": professor.num_ratings,
+                "would_take_again": round(professor.would_take_again, 1) if professor.would_take_again is not None else None
+            }
+            return response_data
+        else:
+            return {"error": "Invalid school"}
+    else:
+        return {"error": "Professor not found"}
+
+def outputData(data, userInput):
     
-    parsed_data = parseData(data, prof_input)
-    # ------------ MAIN ISSUE - NEED TO FIX IF PROF HAS ONLY TAUGHT < 3 SECTIONS (shouldnt be too hard) --------------------
-    # FOR NOW, MANUALLY CHANGE -3 to -2 (IF PROF HAS TAUGHT 2 SECTIONS) or -1.
+    parsed_data = parseData(data, userInput['professor'])
     recent_sems = dict(list(parsed_data.items())[-3:])
-    # print(recent_sems)
     
     gpa_output = []
     letter_percent = []
     for sem in recent_sems:
-        
         gpa = calculate_average_gpa(recent_sems, sem)
-        gpa_output.append(f"{gpa} ({sem})")
+        gpa_output.append(f"{gpa}")
         letter_percent.append(percent_letter_grades(recent_sems,sem))
-        # a.append(percent_letter_grades(recent_sems, sem))
     
     combined_lists = zip(*letter_percent)
     averages = [round(sum(values)/len(values), 2) for values in combined_lists]
@@ -91,38 +103,47 @@ def outputData(data, prof_input):
     #     print(f"{averages[i]}% of students recieved a {letter}")
     #     letter = chr(ord(letter) + 1)  
     # print(f"{averages[4]}% of students recieved a F")
-    output_dict = {}
+    output_dict = {
+        "Professor": {},
+        "GradesPercentage": {},
+        "GPA": {}
+    }
+    output_dict["Professor"]["Course"] = f"{userInput['dept']} {userInput['number']}"
+    output_dict["Professor"]["Name"] = userInput['professor']
     
-    output_dict["prof"] = prof_input
-    for i in range(len(gpa_output)):
-        output_dict[f"GPA{i+1}"] = gpa_output[i]
+    prof_info = get_professor_info(userInput)
+    output_dict["Professor"]["Rating"] = prof_info["rating"]
+    output_dict["Professor"]["Num_Ratings"] = prof_info["num_ratings"]
+    output_dict["Professor"]["Difficulty"] = prof_info["difficulty"]
+    output_dict["Professor"]["Would Take Again"] = prof_info["would_take_again"]
+    
+    # for i in range(len(gpa_output)):
+    #     output_dict[f"GPA ({recent_sems[i]})"] = gpa_output[i]
+    i = 0
+    for sem in recent_sems:
+        output_dict["GPA"][f"{sem}"] = gpa_output[i]
+        i+=1
+        
     letter = "A"
     for i in range(4):
-        output_dict[letter] = f"{averages[i]}"
+        output_dict["GradesPercentage"][letter] = f"{averages[i]}"
         letter = chr(ord(letter) + 1)  
-    output_dict["F"] = f"{averages[4]}"
-
-    # print(output_dict)
-    
-    # output_dict_json = json.dumps(output_dict)
-    
-    # print(output_dict_json)
-    # return output_dict
+    output_dict["GradesPercentage"]["F"] = f"{averages[4]}"
     
     return output_dict
-    # return {'a': 'n'}
-    # return output_dict_json
 
-def process(input):
+
+
+def process(inputString):
     # Important - converts stringified Json to actual Json object
-    data = loads(input)
-    print(f"Inside process {data}")
+    userInput = loads(inputString)
+    # print(f"Inside process {data}")
     try:
-        response = requests.post(url, data=data)
+        response = requests.post(url, data=userInput)
         
         if response.status_code == 200:
-            json_response = response.json()
-            return outputData(json_response, data['professor'])
+            subjectGrades = response.json()
+            return outputData(subjectGrades, userInput)
         else:
             print(f"Failed to retrieve data. Status code: {response.reason}")
 
