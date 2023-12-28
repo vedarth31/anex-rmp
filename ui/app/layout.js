@@ -1,7 +1,11 @@
 import Home from "./page"
+import Form from "./components/Form"
 
 export default function RootLayout({ children }) {
   return (
-    <Home />
+    <div>
+      <Home />
+      <Form />
+    </div>
   )
 }
