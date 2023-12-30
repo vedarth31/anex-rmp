@@ -3,16 +3,16 @@ from flask import Blueprint, jsonify, request
 from profrec.blueprints.utils.anex_soup import process
 
 apis = Blueprint('api', __name__, url_prefix='/api')
-
-@apis.route('/version', methods = ['GET'])
-def version():
-    return jsonify(version = '0.0.2')
-
-@apis.route('/health', methods = ['GET'])
-def health():
-    return jsonify(status = 'ok')
     
-@apis.route('/anex', methods = ['POST'])
+@apis.route('/course_and_prof_info', methods = ['POST'])
 def get_grades():
-    response = process(request.data)
-    return jsonify(response)    
+    
+    try: 
+        print(request.data)
+        response = process(request.data)
+        print(response)
+        return jsonify(response)
+
+    except Exception as e:
+        print(f"Error processing request: {str(e)}")
+        return jsonify({"success": False, "message": "Error processing request"}), 400
