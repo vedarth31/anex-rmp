@@ -1,16 +1,18 @@
 "use client"
 
-import React, { useState } from "react"
-import axios from "axios"
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function Form() {
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         classCode: "",
         classNum: "",
         profName: "",
-    });
+    };
 
+    const [formData, setFormData] = useState(initialFormData);
     const [responseData, setResponseData] = useState("");
+    const [loadingState, setLoadingState] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,13 +20,25 @@ export default function Form() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        setLoadingState(true);
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/api/course_and_prof_info', {
+                dept: formData.classCode,
+                number: formData.classNum,
+                professor: formData.profName
+            });
+            setResponseData(JSON.stringify(response.data, null, 2));
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoadingState(false);
+        }
+    };
 
-        const response = await axios.post('http://127.0.0.1:5000/api/course_and_prof_info', { dept: formData.classCode, number: formData.classNum, professor: formData.profName });
-        // console.log("response: ", response);
-        console.log("response: ", response.data);
-        setResponseData(JSON.stringify(response.data, null, 2));
-    }
+    const handleReset = () => {
+        setFormData(initialFormData);
+        setResponseData("");
+    };
 
     const renderGPA = () => {
         const { Professor } = JSON.parse(responseData);
@@ -40,14 +54,13 @@ export default function Form() {
                 </ul>
             </div>
         );
-    }
+    };
 
     const renderGradesPercentage = () => {
-
         const { GradesPercentage } = JSON.parse(responseData);
         return (
             <div>
-                <b>In these semesters, they had an average grade distribution of: </b>
+                <b>In these semesters, students had an average grade distribution of: </b>
                 <ul style={{ listStyleType: 'none', padding: 0 }}>
                     {Object.entries(GradesPercentage).map(([grade, percentage]) => (
                         <li key={grade}>{`${grade}: ${percentage}%`}</li>
@@ -55,14 +68,13 @@ export default function Form() {
                 </ul>
             </div>
         );
-    }
+    };
 
     const renderProfessorInfo = () => {
-
         const { Professor } = JSON.parse(responseData);
         return (
             <div>
-                <p><b>{`${Professor["Num_Ratings"]} students on RMP have stated that`}:</b></p>
+                <p><b>{`${Professor["Num_Ratings"]} students on Rate my Professor have stated that`}:</b></p>
                 <p>{`Difficulty: ${Professor["Difficulty"]}/5`}</p>
                 <p>{`Rating: ${Professor.Rating}/5`}</p>
                 <p>{`${Professor["Would Take Again"]}% would take again.`}</p>
@@ -72,28 +84,52 @@ export default function Form() {
 
     return (
         <div>
-            <form className="form-container" onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="classCode">4 Letter Class Code: </label>
-                    <input type="text" id="classCode" name="classCode" value={formData.classCode} onChange={handleChange} />
+            <form className="container mt-4" onSubmit={handleSubmit} style={{maxWidth: "400px", marginLeft: "84px"}}>
+                <div className="form-group">
+                    <label htmlFor="classCode">4 Letter Class Code:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="classCode"
+                        name="classCode"
+                        value={formData.classCode}
+                        onChange={handleChange} />
                 </div>
 
-                <div>
-                    <label htmlFor="classNum">3 Digit Class Number: </label>
-                    <input type="text" id="classNum" name="classNum" value={formData.classNum} onChange={handleChange} />
+                <div className="form-group">
+                    <label htmlFor="classNum">3 Digit Class Number:</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="classNum"
+                        name="classNum"
+                        value={formData.classNum}
+                        onChange={handleChange} />
                 </div>
 
-                <div>
+                <div className="form-group">
                     <label htmlFor="profName">Professor Name:</label>
-                    <input type="text" id="profName" name="profName" value={formData.profName} onChange={handleChange} />
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="profName"
+                        name="profName"
+                        value={formData.profName}
+                        onChange={handleChange} />
                 </div>
-                <input type="submit" value="Submit" />
+
+                <button type="submit" className="btn btn-primary" style={{ marginTop: "24px" }}>Submit</button>
+                <button type="button" className="btn btn-danger" style={{ marginTop: "24px", marginLeft: "24px" }} onClick={handleReset}>Reset</button>
             </form>
 
             <br></br>
 
+            {loadingState &&
+                <p style={{ marginLeft: "100px" }}>Loading...</p>
+            }
+
             {responseData && (
-                <div>
+                <div style={{ marginLeft: "100px", marginBottom: "64px" }}>
                     {renderGPA()}
                     {renderGradesPercentage()}
                     {renderProfessorInfo()}
