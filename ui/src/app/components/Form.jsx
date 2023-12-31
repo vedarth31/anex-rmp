@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import './Form.css'
+import Loading from "../loading.json"
+import Lottie from "lottie-react"
 
 export default function Form() {
     const initialFormData = {
@@ -83,8 +86,8 @@ export default function Form() {
     };
 
     return (
-        <div>
-            <form className="container mt-4" onSubmit={handleSubmit} style={{maxWidth: "400px", marginLeft: "84px"}}>
+        <div className="main">
+            <form className="container mt-4" onSubmit={handleSubmit} >
                 <div className="form-group">
                     <label htmlFor="classCode">4 Letter Class Code:</label>
                     <input
@@ -118,18 +121,22 @@ export default function Form() {
                         onChange={handleChange} />
                 </div>
 
-                <button type="submit" className="btn btn-primary" style={{ marginTop: "24px" }}>Submit</button>
-                <button type="button" className="btn btn-danger" style={{ marginTop: "24px", marginLeft: "24px" }} onClick={handleReset}>Reset</button>
+                <span className="buttons">
+                    <button type="submit" className="btn btn-primary" >Submit</button>
+                    <button type="button" className="btn btn-danger" onClick={handleReset}>Reset</button>
+                </span>
             </form>
 
             <br></br>
 
             {loadingState &&
-                <p style={{ marginLeft: "100px" }}>Loading...</p>
+                <p className="loading-animate" >
+                    <Lottie animationData={Loading} />
+                </p>
             }
 
             {responseData && (
-                <div style={{ marginLeft: "100px", marginBottom: "64px" }}>
+                <div className="results-container" >
                     {renderGPA()}
                     {renderGradesPercentage()}
                     {renderProfessorInfo()}

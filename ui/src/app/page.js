@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', margin: "20px" }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: "center", marginTop: "30px" }}>
       <img
         src="/tamu_logo.png"
         alt="Texas A&M Logo"
