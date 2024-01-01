@@ -50,7 +50,7 @@ export default function Form() {
         return (
             <div>
                 <b>In recent semesters, {Professor.Name} had average GPAs of:  </b>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                <ul>
                     {Object.entries(GPA).map(([semester, gpa]) => (
                         <li key={semester}>{`${semester}: ${gpa}`}</li>
                     ))}
@@ -64,7 +64,7 @@ export default function Form() {
         return (
             <div>
                 <b>In these semesters, students had an average grade distribution of: </b>
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
+                <ul>
                     {Object.entries(GradesPercentage).map(([grade, percentage]) => (
                         <li key={grade}>{`${grade}: ${percentage}%`}</li>
                     ))}
@@ -130,9 +130,9 @@ export default function Form() {
             <br></br>
 
             {loadingState &&
-                <p className="loading-animate" >
+                <div className="loading-animate" >
                     <Lottie animationData={Loading} />
-                </p>
+                </div>
             }
 
             {responseData && (

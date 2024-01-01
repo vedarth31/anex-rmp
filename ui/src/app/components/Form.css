@@ -12,6 +12,7 @@
 
 .buttons {
     text-align: center;
+    /* width: 30px; */
 }
 
 .form-group {
@@ -36,3 +37,10 @@
     margin-top: 24px;
     width: 250px;
 }
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* style={{ listStyleType: 'none', padding: 0 }} */

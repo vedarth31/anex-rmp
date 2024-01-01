@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 # import ratemyprofessor
-from profrec.blueprints.utils.anex_soup import process
+from profrec.blueprints.utils.prof_info import process
 
 apis = Blueprint('api', __name__, url_prefix='/api')
     
@@ -8,9 +8,9 @@ apis = Blueprint('api', __name__, url_prefix='/api')
 def get_grades():
     
     try: 
-        print(request.data)
+        # print(request.data)
         response = process(request.data)
-        print(response)
+        # print(response)
         return jsonify(response)
 
     except Exception as e:

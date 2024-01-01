@@ -76,6 +76,7 @@ def get_professor_info(user_input):
             }
             return response_data
         else:
+            print("Could not find professor")
             return {"error": "Invalid school"}
     else:
         return {"error": "Professor not found"}
