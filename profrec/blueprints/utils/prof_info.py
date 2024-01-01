@@ -11,12 +11,9 @@ def changeProfName(old_name):
     
 def parseData(data, prof_input):
     name = changeProfName(prof_input)
-    # name = prof_input
     parsed_data = {}
     for class_info in data['classes']:
         prof = class_info['prof']
-        # if(class_info['semester'] == '20s23'):
-        # print(prof, name)
         if(prof == name):
             
             sem = f"{class_info['semester']} {class_info['year']}"
@@ -24,7 +21,13 @@ def parseData(data, prof_input):
                 parsed_data[sem] = []
             
             total = int(class_info['A']) + int(class_info['B']) + int(class_info['C']) + int(class_info['D']) + int(class_info['F']) + int(class_info['Q']) 
-            parsed_data[sem].append({"GPA": round(float(class_info['gpa']), 2), "As": int(class_info['A']), "Bs": int(class_info['B']), "Cs": int(class_info['C']), "Ds": int(class_info['D']), "Fs": int(class_info['F']), "total": total})
+            parsed_data[sem].append({"GPA": round(float(class_info['gpa']), 2),
+                                     "As": int(class_info['A']),
+                                     "Bs": int(class_info['B']),
+                                     "Cs": int(class_info['C']),
+                                     "Ds": int(class_info['D']),
+                                     "Fs": int(class_info['F']),
+                                     "total": total})
     
     return parsed_data
 
@@ -77,7 +80,7 @@ def get_professor_info(user_input):
             return response_data
         else:
             print("Could not find professor")
-            return {"error": "Invalid school"}
+            return False
     else:
         return {"error": "Professor not found"}
 
@@ -95,15 +98,7 @@ def outputData(data, userInput):
     
     combined_lists = zip(*letter_percent)
     averages = [round(sum(values)/len(values), 2) for values in combined_lists]
-    # print(averages)
-    # print(sum(averages))
-    
-    # print(f"In recent semesters, Dr. {prof_input} had average GPAs of: {', '.join(gpa_output)}. In these semesters: ")
-    # letter = "A"
-    # for i in range(4):
-    #     print(f"{averages[i]}% of students recieved a {letter}")
-    #     letter = chr(ord(letter) + 1)  
-    # print(f"{averages[4]}% of students recieved a F")
+
     output_dict = {
         "Professor": {},
         "GradesPercentage": {},
@@ -112,14 +107,6 @@ def outputData(data, userInput):
     output_dict["Professor"]["Course"] = f"{userInput['dept']} {userInput['number']}"
     output_dict["Professor"]["Name"] = userInput['professor']
     
-    prof_info = get_professor_info(userInput)
-    output_dict["Professor"]["Rating"] = prof_info["rating"]
-    output_dict["Professor"]["Num_Ratings"] = prof_info["num_ratings"]
-    output_dict["Professor"]["Difficulty"] = prof_info["difficulty"]
-    output_dict["Professor"]["Would Take Again"] = prof_info["would_take_again"]
-    
-    # for i in range(len(gpa_output)):
-    #     output_dict[f"GPA ({recent_sems[i]})"] = gpa_output[i]
     i = 0
     for sem in recent_sems:
         output_dict["GPA"][f"{sem}"] = gpa_output[i]
@@ -131,6 +118,23 @@ def outputData(data, userInput):
         letter = chr(ord(letter) + 1)  
     output_dict["GradesPercentage"]["F"] = f"{averages[4]}"
     
+    
+    prof_info = get_professor_info(userInput)
+    
+    print(f"results: {prof_info}")
+    
+    if(not prof_info):
+        print("N/A")
+        output_dict["Professor"]["RMP_data"] = "N/A"
+        return output_dict
+    
+    output_dict["Professor"]["Rating"] = prof_info["rating"]
+    output_dict["Professor"]["Num_Ratings"] = prof_info["num_ratings"]
+    output_dict["Professor"]["Difficulty"] = prof_info["difficulty"]
+    output_dict["Professor"]["Would Take Again"] = prof_info["would_take_again"]
+    
+    # for i in range(len(gpa_output)):
+    #     output_dict[f"GPA ({recent_sems[i]})"] = gpa_output[i]
     return output_dict
 
 

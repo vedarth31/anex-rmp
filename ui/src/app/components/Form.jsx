@@ -75,6 +75,14 @@ export default function Form() {
 
     const renderProfessorInfo = () => {
         const { Professor } = JSON.parse(responseData);
+
+        if(Professor["RMP_data"] == "N/A") {
+            return (
+                <div>
+                    <p>Sorry, we were unable to retrieve this professor's RMP data.</p>
+                </div>
+            )
+        }
         return (
             <div>
                 <p><b>{`${Professor["Num_Ratings"]} students on Rate my Professor have stated that`}:</b></p>
