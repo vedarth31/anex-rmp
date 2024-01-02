@@ -16,6 +16,7 @@ export default function Form() {
     const [formData, setFormData] = useState(initialFormData);
     const [responseData, setResponseData] = useState("");
     const [loadingState, setLoadingState] = useState(false);
+    const [error, setError] = useState("")
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,13 +25,23 @@ export default function Form() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoadingState(true);
+        setError("")
+        setResponseData("")
         try {
             const response = await axios.post('http://127.0.0.1:5000/api/course_and_prof_info', {
                 dept: formData.classCode,
                 number: formData.classNum,
                 professor: formData.profName
             });
-            setResponseData(JSON.stringify(response.data, null, 2));
+
+            if (!response.data || Object.keys(response.data).length === 0) {
+                setError("Invalid data entered. Please check your inputs.");
+                setResponseData("");
+            } else {
+                setResponseData(JSON.stringify(response.data, null, 2));
+                setError("");
+            }
+
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -41,6 +52,7 @@ export default function Form() {
     const handleReset = () => {
         setFormData(initialFormData);
         setResponseData("");
+        setError("");
     };
 
     const renderGPA = () => {
@@ -76,7 +88,7 @@ export default function Form() {
     const renderProfessorInfo = () => {
         const { Professor } = JSON.parse(responseData);
 
-        if(Professor["RMP_data"] == "N/A") {
+        if (Professor["RMP_data"] == "N/A") {
             return (
                 <div>
                     <p>Sorry, we were unable to retrieve this professor's RMP data.</p>
@@ -92,6 +104,10 @@ export default function Form() {
             </div>
         );
     };
+
+    // const outputValidData = () => {
+
+    // }
 
     return (
         <div className="main">
@@ -148,6 +164,12 @@ export default function Form() {
                     {renderGPA()}
                     {renderGradesPercentage()}
                     {renderProfessorInfo()}
+                </div>
+            )}
+
+            {error && (
+                <div className="error-message">
+                    <p>{error}</p>
                 </div>
             )}
         </div>
