@@ -43,10 +43,6 @@ def calculate_average_gpa(data, semester):
     
     sections = data[semester]
 
-    # if not sections:
-    #     print(f"No data available for {semester}")
-    #     return None
-
     total_students = sum(section["As"] + section["Bs"] + section["Cs"] + section["Ds"] + section["Fs"] for section in sections)
     weighted_sum = sum(section["GPA"] * (section["As"] + section["Bs"] + section["Cs"] + section["Ds"] + section["Fs"]) for section in sections)
 
@@ -68,10 +64,8 @@ def percent_letter_grades(data, semester):
     return [round(grade/total_students * 100, 2) for grade in grades]
 
 def get_professor_info(user_input):
-    # data = request.get_json()
-    # print(f"{data}")
+
     prof_name = user_input['professor']
-    # prof_name = "Amy Austin"
 
     professor = ratemyprofessor.get_professor_by_school_and_name(
         ratemyprofessor.get_school_by_name("Texas A&M University"), prof_name)
@@ -144,8 +138,6 @@ def outputData(data, userInput):
     output_dict["Professor"]["Difficulty"] = prof_info["difficulty"]
     output_dict["Professor"]["Would Take Again"] = prof_info["would_take_again"]
     
-    # for i in range(len(gpa_output)):
-    #     output_dict[f"GPA ({recent_sems[i]})"] = gpa_output[i]
     return output_dict
 
 
@@ -153,7 +145,6 @@ def outputData(data, userInput):
 def process(inputString):
     # Important - converts stringified Json to actual Json object
     userInput = loads(inputString)
-    # print(f"Inside process {data}")
     try:
         response = requests.post(url, data=userInput)
         subjectGrades = response.json()

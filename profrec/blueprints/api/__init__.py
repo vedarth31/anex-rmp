@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
-# import ratemyprofessor
 from profrec.blueprints.utils.prof_info import process
 from profrec.blueprints.utils.update_db import update
+from profrec.blueprints.utils.get_data_db import check_data
 import logging
 
 apis = Blueprint('api', __name__, url_prefix='/api')
@@ -13,11 +13,18 @@ def get_grades():
         response = process(request.data)
         # print(response)
         return jsonify(response)
-
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({"success": False, "message": "Error processing request"}), 400
-
+    
+@apis.route('/get_course_info', methods=['POST'])
+def get_info():
+    try: 
+        # print(request.data)
+        return jsonify(check_data(request.data))
+    except Exception as e:
+        print(f"Error processing request: {str(e)}")
+        return jsonify({"success": False, "message": "Error processing request"}), 400
 
 @apis.route('/update-db', methods = ['GET'])
 def test():
