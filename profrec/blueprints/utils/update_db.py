@@ -9,10 +9,11 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 url = "https://anex.us/grades/getData/"
-db_user = os.getenv('DB_USER')
-db_password = os.getenv('DB_PASSWORD')
-# db_host = os.getenv('DB_HOST')
-db_name = os.getenv('DB_NAME')
+db_user = os.getenv('PGUSER')  # Railway provides this as 'postgres'
+db_password = os.getenv('PGPASSWORD')  # Your password
+db_host = os.getenv('PGHOST')  # Railway provides this host
+db_port = os.getenv('PGPORT')  # The port Railway provides
+db_name = os.getenv('PGDATABASE')
 
 def get_all_profs(userInput):
 
@@ -124,7 +125,13 @@ def get_prof_data(userInput, profs):
 
 def insert_professor_data(all_prof_data):
     try:
-        conn = psycopg2.connect(f"dbname={db_name} user={db_user} password={db_password}")
+        conn = psycopg2.connect(
+                dbname=db_name,
+                user=db_user,
+                password=db_password,
+                host=db_host,
+                port=db_port
+        )
         cur = conn.cursor()
         cur.execute("DELETE FROM professor_data")
 
