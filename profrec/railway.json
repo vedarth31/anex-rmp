@@ -2,7 +2,7 @@
     "services": {
       "web": {
         "buildCommand": "pip install -r requirements.txt",
-        "startCommand": "gunicorn wsgi:app --workers 3"
+        "startCommand": "gunicorn profrec.blueprints:app --workers 3"
       }
     },
     "plugins": [
