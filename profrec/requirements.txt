@@ -1,0 +1,7 @@
+Flask
+requests
+psycopg2-binary
+beautifulsoup4
+RateMyProfessorAPI
+python-dotenv
+gunicorn
