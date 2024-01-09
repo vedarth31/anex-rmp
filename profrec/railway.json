@@ -1,0 +1,21 @@
+{
+    "services": {
+      "web": {
+        "buildCommand": "pip install -r requirements.txt",
+        "startCommand": "gunicorn wsgi:app --workers 3"
+      }
+    },
+    "plugins": [
+      {
+        "name": "postgresql",
+        "service": "db"
+      }
+    ],
+    "variables": [
+      {
+        "key": "FLASK_ENV",
+        "value": "production"
+      }
+    ]
+  }
+  

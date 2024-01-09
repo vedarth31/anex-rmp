@@ -17,7 +17,7 @@ db_name = os.getenv('DB_NAME')
 def get_all_profs(userInput):
 
     # for some reason, hatfield's name is incorrect
-    BAD_NAMES = ['HATFIELD L', ] 
+    BAD_NAMES = ['HATFIELD L', 'RAHM JR']
     
     url = "https://anex.us/grades/getData/"
 
@@ -155,8 +155,8 @@ def insert_professor_data(all_prof_data):
 
 def update():
     classes = [
-        {"dept": "MATH", "number": "221"},
-        # {"dept": "STAT", "number": "211"}
+        # {"dept": "MATH", "number": "221"},
+        {"dept": "STAT", "number": "211"}
     ]
 
     all_prof_data = []
