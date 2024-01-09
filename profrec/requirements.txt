@@ -6,4 +6,3 @@ RateMyProfessorAPI
 python-dotenv
 gunicorn
 Flask-Cors
-logging
