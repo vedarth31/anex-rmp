@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
-from profrec.blueprints.utils.prof_info import process
-from profrec.blueprints.utils.update_db import update
-from profrec.blueprints.utils.get_data_db import check_data
+# import ratemyprofessor
+from ..utils.prof_info import process
+from ..utils.update_db import update
+from ..utils.get_data_db import check_data
 import logging
 
 apis = Blueprint('api', __name__, url_prefix='/api')
