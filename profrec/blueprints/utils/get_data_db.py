@@ -4,7 +4,7 @@ from json import loads
 
 # Replace these values with your actual database credentials
 dbname = "prof_rec_sample_data"
-user = "vedarth"
+user = "anirudhnukala"
 password = "sample_data"
 host = "localhost"
 port = "5432"
