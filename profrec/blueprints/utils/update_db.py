@@ -162,7 +162,7 @@ def insert_professor_data(all_prof_data):
 
 def update():
     classes = [
-        # {"dept": "MATH", "number": "221"},
+        {"dept": "MATH", "number": "221"},
         {"dept": "STAT", "number": "211"}
     ]
 
