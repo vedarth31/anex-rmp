@@ -1,1 +1,1 @@
-web: gunicorn 'profrec.blueprints:app'
+web: gunicorn blueprints:app
