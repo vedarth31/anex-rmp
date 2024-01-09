@@ -2,5 +2,5 @@ Flask
 requests
 psycopg2-binary
 beautifulsoup4
-ratemyprofessor
+RateMyProfessorAPI
 python-dotenv
