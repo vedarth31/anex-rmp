@@ -6,6 +6,7 @@ from ..utils.get_data_db import check_data
 import logging
 
 apis = Blueprint('api', __name__, url_prefix='/api')
+logging.basicConfig(level=logging.INFO)
     
 @apis.route('/course_and_prof_info', methods = ['POST'])
 def get_grades():
@@ -15,7 +16,7 @@ def get_grades():
         # print(response)
         return jsonify(response)
     except Exception as e:
-        print(f"Error processing request: {str(e)}")
+        logging.error(f"Error processing request: {str(e)}")
         return jsonify({"success": False, "message": "Error processing request"}), 400
     
 @apis.route('/get_course_info', methods=['POST'])
@@ -24,7 +25,7 @@ def get_info():
         # print(request.data)
         return jsonify(check_data(request.data))
     except Exception as e:
-        print(f"Error processing request: {str(e)}")
+        logging.error(f"Error processing request: {str(e)}")
         return jsonify({"success": False, "message": "Error processing request"}), 400
 
 @apis.route('/update-db', methods = ['GET'])
