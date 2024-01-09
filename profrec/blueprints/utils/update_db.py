@@ -1,8 +1,8 @@
 from flask import jsonify
 import requests
 from json import dumps
-from profrec.blueprints.utils.scrape_dir import get_professor_profiles
-from profrec.blueprints.utils.prof_info import process
+from .scrape_dir import get_professor_profiles
+from .prof_info import process
 import psycopg2
 import os
 from dotenv import load_dotenv
