@@ -146,7 +146,7 @@ def get_prof_info(user_input):
 def check_data(data):
     
     user_input = loads(data)
-
+    
     if(user_input['dept'] == ""):
         return 'invalid department'
     elif(user_input['number'] == ""):

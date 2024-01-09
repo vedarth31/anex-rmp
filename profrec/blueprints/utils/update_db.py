@@ -1,10 +1,8 @@
 from flask import jsonify
-import requests
 from json import dumps
 from .scrape_dir import get_professor_profiles
 from .prof_info import process
-import psycopg2
-import os
+import os, logging, psycopg2, requests
 from dotenv import load_dotenv
 load_dotenv()  
 
@@ -14,6 +12,8 @@ db_password = os.getenv('PGPASSWORD')  # Your password
 db_host = os.getenv('PGHOST')  # Railway provides this host
 db_port = os.getenv('PGPORT')  # The port Railway provides
 db_name = os.getenv('PGDATABASE')
+
+logging.basicConfig(level=logging.INFO)
 
 def get_all_profs(userInput):
 
@@ -77,7 +77,7 @@ def get_prof_data(userInput, profs):
             errors.append({"prof": prof, "class": userInput, "error": "Name parsing error"})
             continue
 
-        print(f"Getting {professor[0]}: {i}")
+        logging.info(f"Getting {professor[0]}: {i}")
 
         payload = dumps({
             "dept": userInput["dept"],
@@ -119,7 +119,7 @@ def get_prof_data(userInput, profs):
             errors.append({"prof": prof, "class": userInput, "error": error_msg})
 
         prof_data.append(schema)
-        print(f"Added {professor}: {i}")
+        logging.info(f"Added {professor}: {i}")
 
     return prof_data, errors
 
@@ -157,7 +157,7 @@ def insert_professor_data(all_prof_data):
         conn.close()
 
     except Exception as e:
-        print("Database operation failed: ", e)
+        logging.error("Database operation failed: ", e)
 
 
 def update():
@@ -171,11 +171,10 @@ def update():
 
     for fclass in classes:
         profs = get_all_profs(fclass)
-        print(profs)
         prof_data, errors = get_prof_data(fclass, profs)
         all_prof_data.append(prof_data)
         total_errors.extend(errors)  # Collect errors from each class
-        print(f"Finished {fclass['dept']} {fclass['number']}")
+        logging.info(f"Finished {fclass['dept']} {fclass['number']}")
 
     insert_professor_data(all_prof_data)
 

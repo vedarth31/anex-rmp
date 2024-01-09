@@ -1,8 +1,9 @@
-import requests
+import requests, ratemyprofessor, logging
 from json import loads
-import ratemyprofessor
 
 url = "https://anex.us/grades/getData/"
+
+logging.basicConfig(level=logging.INFO)
 
 def changeProfName(old_name):
     try:
@@ -80,7 +81,7 @@ def get_professor_info(user_input):
             }
             return response_data
         else:
-            print("Could not find professor")
+            logging.error("Could not find professor")
             return False
     else:
         return {"error": "Professor not found"}
@@ -126,10 +127,10 @@ def outputData(data, userInput):
     
     prof_info = get_professor_info(userInput)
     
-    print(f"results: {prof_info}")
+    logging.info(f"results: {prof_info}")
     
     if(not prof_info):
-        print("N/A")
+        # logging.error("N/A")
         output_dict["Professor"]["RMP_data"] = "N/A"
         return output_dict
     
@@ -152,9 +153,9 @@ def process(inputString):
         if response.status_code == 200:
             return outputData(subjectGrades, userInput)
         else:
-            print(f"Failed to retrieve data. Status code: {response.reason}")
+            logging.error(f"Failed to retrieve data. Status code: {response.reason}")
 
     except requests.exceptions.RequestException as e:
-        print(f"Request failed: {e}")
+        logging.error(f"Request failed: {e}")
     except:
         return {}
