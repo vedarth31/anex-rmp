@@ -28,7 +28,7 @@ export default function Form() {
         setError("")
         setResponseData("")
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/course_and_prof_info', {
+            const response = await axios.post('http://127.0.0.1:5000/api/course_and_prof_info', {
                 dept: formData.classCode,
                 number: formData.classNum,
                 professor: formData.profName
