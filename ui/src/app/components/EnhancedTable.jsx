@@ -10,15 +10,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import Grow from '@mui/material/Grow';
+
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
 
 const headCells = [
   {
     id: 'name',
     numeric: false,
-    label: 'Professor Name',
+    label: 'Professor',
   },
   {
     id: 'difficulty',
@@ -83,10 +83,10 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onRequestSort, order, orderBy } = props;
+  const { order, orderBy, onRequestSort } = props;
 
-  const createSortHandler = (property) => {
-    onRequestSort(property);
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
   };
 
   return (
@@ -96,27 +96,21 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
           >
-            <div
-              onClick={() => createSortHandler(headCell.id)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                cursor: 'pointer',
-                flexDirection: 'row-reverse',
-              }}
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
             >
-              <Grow in={orderBy === headCell.id}>
-                <div style={{ marginRight: '8px' }}>
-                  {order === 'desc' ? (
-                    <ArrowDownwardIcon />
-                  ) : (
-                    <ArrowUpwardIcon />
-                  )}
-                </div>
-              </Grow>
               {headCell.label}
-            </div>
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -128,13 +122,26 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
+  // rowCount: PropTypes.number.isRequired,
 };
 
 function EnhancedTable({ responseData }) {
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('name');
 
-  const handleRequestSort = (property) => {
+  // if (!responseData) {
+  //   console.error("Response data is undefined");
+  //   return null; // or return an empty table or loading indicator
+  // }
+
+  // // Ensure apiData is an array
+  // if (!Array.isArray(responseData)) {
+  //   console.error("API data is not an array:", responseData);
+  //   return null; // or handle the unexpected data structure
+  // }
+
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
+
+  const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -146,6 +153,8 @@ function EnhancedTable({ responseData }) {
     difficulty: courseInfo.Professor?.Difficulty || 0,
     rating: courseInfo.Professor?.Rating || 0,
     wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] || 0,
+    //these GPAs are not properly dynamically loaded in... 
+    //leading to incorrect display of data
     gpaTerm1: courseInfo.GPA?.['SPRING 2022'] || 0,
     gpaTerm2: courseInfo.GPA?.['SPRING 2023'] || 0,
     gpaTerm3: courseInfo.GPA?.['SUMMER 2022'] || 0,
@@ -210,7 +219,7 @@ function EnhancedTable({ responseData }) {
 }
 
 EnhancedTable.propTypes = {
-  responseData: PropTypes.array,
+  responseData: PropTypes.string,
 };
 
 export default EnhancedTable;

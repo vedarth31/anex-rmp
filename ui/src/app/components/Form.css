@@ -1,4 +1,4 @@
-.main {
+/* .main {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,12 +7,12 @@
 
 .container {
     max-width: 400px;
-    /* margin-left: 84px; */
+    margin-left: 84px;
 }
 
 .buttons {
     text-align: center;
-    /* width: 30px; */
+    width: 30px;
 }
 
 .form-group {
@@ -41,6 +41,22 @@
 ul {
     list-style-type: none;
     padding: 0;
-}
+} */
 
 /* style={{ listStyleType: 'none', padding: 0 }} */
+
+/* .buttons {
+    display: flex;
+    justify-content: space-between;
+    
+    text-align: center;
+    width: 30px;
+} */
+
+
+.results-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    margin-left: 100px;
+}
