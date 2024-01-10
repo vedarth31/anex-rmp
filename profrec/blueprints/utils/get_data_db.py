@@ -6,7 +6,7 @@ load_dotenv()
 
 # Replace these values with your actual database credentials (LOCAL BELOW)
 dbname = "prof_rec_sample_data"
-user = "anirudhnukala"
+user = "vedarth"
 password = "sample_data"
 host = "localhost"
 port = "5432"
