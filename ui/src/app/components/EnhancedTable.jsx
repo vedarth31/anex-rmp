@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from 'react';
+import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -11,98 +11,20 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-
-function createData(name, term1, gpa1, term2, gpa2, term3, gpa3, a, b, c, d, f, rating, difficulty, takeAgain, numReviews) {
-  return {
-    name, term1, gpa1, term2, gpa2, term3, gpa3, a, b, c, d, f, rating, difficulty, takeAgain, numReviews
-  };
-}
-
-const rows = [
-  createData('Bret Lockhart', 'SPRING 2022', 2.95, 'SPRING 2023', 2.93, 'N/A', 'N/A', 38.41, 30.07, 22.98, 4.69, 3.85, 4.1, 4.4, 69.1, 193),
-  createData('Robert Rahm', 'SPRING 2023', 2.64, 'N/A', 'N/A', 'N/A', 'N/A', 27.36, 29.48, 28.9, 8.48, 5.78, 3, 3.5, 70.6, 104),
-  createData('Todd Schrader', 'SPRING 2022', 3.15, 'SPRING 2023', 2.94, 'SUMMER 2022', 2.33, 37.32, 28.48, 19.09, 7.65, 7.46, 5, 3.3, 95.6, 257),
-  createData('Amy Austin', 'SPRING 2019', 3.07, 'SPRING 2022', 2.81, 'SPRING 2023', 2.65, 36.48, 28.06, 23.08, 7.97, 4.41, 5, 4, 97.1, 178),
-];
+import { visuallyHidden } from '@mui/utils';
 
 const headCells = [
   {
     id: 'name',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Professor Name',
   },
   {
-    id: 'term1',
+    id: 'course',
     numeric: false,
     disablePadding: false,
-    label: 'Term 1',
-  },
-  {
-    id: 'gpa1',
-    numeric: true,
-    disablePadding: false,
-    label: 'GPA 1',
-  },
-  {
-    id: 'term2',
-    numeric: false,
-    disablePadding: false,
-    label: 'Term 2',
-  },
-  {
-    id: 'gpa2',
-    numeric: true,
-    disablePadding: false,
-    label: 'GPA 2',
-  },
-  {
-    id: 'term3',
-    numeric: false,
-    disablePadding: false,
-    label: 'Term 3',
-  },
-  {
-    id: 'gpa3',
-    numeric: true,
-    disablePadding: false,
-    label: 'GPA 3',
-  },
-  {
-    id: 'a',
-    numeric: true,
-    disablePadding: false,
-    label: 'A%',
-  },
-  {
-    id: 'b',
-    numeric: true,
-    disablePadding: false,
-    label: 'B%',
-  },
-  {
-    id: 'c',
-    numeric: true,
-    disablePadding: false,
-    label: 'C%',
-  },
-  {
-    id: 'd',
-    numeric: true,
-    disablePadding: false,
-    label: 'D%',
-  },
-  {
-    id: 'f',
-    numeric: true,
-    disablePadding: false,
-    label: 'F%',
-  },
-  {
-    id: 'rating',
-    numeric: true,
-    disablePadding: false,
-    label: 'Rating',
+    label: 'Course',
   },
   {
     id: 'difficulty',
@@ -111,56 +33,77 @@ const headCells = [
     label: 'Difficulty',
   },
   {
-    id: 'takeAgain',
+    id: 'rating',
     numeric: true,
     disablePadding: false,
-    label: 'Take Again (%)',
+    label: 'Rating',
   },
   {
-    id: 'numReviews',
+    id: 'wouldTakeAgain',
     numeric: true,
     disablePadding: false,
-    label: 'Num Reviews',
+    label: 'Would Take Again (%)',
+  },
+  {
+    id: 'gpaTerm1',
+    numeric: true,
+    disablePadding: false,
+    label: 'GPA Term 1',
+  },
+  {
+    id: 'gpaTerm2',
+    numeric: true,
+    disablePadding: false,
+    label: 'GPA Term 2',
+  },
+  {
+    id: 'gpaTerm3',
+    numeric: true,
+    disablePadding: false,
+    label: 'GPA Term 3',
+  },
+  {
+    id: 'aPercentage',
+    numeric: true,
+    disablePadding: false,
+    label: 'A (%)',
+  },
+  {
+    id: 'bPercentage',
+    numeric: true,
+    disablePadding: false,
+    label: 'B (%)',
+  },
+  {
+    id: 'cPercentage',
+    numeric: true,
+    disablePadding: false,
+    label: 'C (%)',
+  },
+  {
+    id: 'dPercentage',
+    numeric: true,
+    disablePadding: false,
+    label: 'D (%)',
+  },
+  {
+    id: 'fPercentage',
+    numeric: true,
+    disablePadding: false,
+    label: 'F (%)',
+  },
+  {
+    id: 'numRatings',
+    numeric: true,
+    disablePadding: false,
+    label: 'Number of Ratings',
   },
 ];
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-const EnhancedTableHead = (props) => {
+function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
 
   const createSortHandler = (property) => (event) => {
-    const nonSortableColumns = ['term1', 'term2', 'term3'];
-    if (nonSortableColumns.includes(property)) {
-      // Disable sorting for specific columns
-      return;
-    }
     onRequestSort(event, property);
   };
 
@@ -174,19 +117,30 @@ const EnhancedTableHead = (props) => {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-            </TableSortLabel>
+            {headCell.id === 'name' ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              <Box component="span">
+                {headCell.label}
+              </Box>
+            )}
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
   );
-};
+}
 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
@@ -194,16 +148,33 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-function EnhancedTable() {
+function EnhancedTable({ responseData }) {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('id');
-  const [rowsPerPage, setRowsPerPage] = React.useState(rows.length);
+  const [orderBy, setOrderBy] = React.useState('name');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+  const apiData = JSON.parse(responseData)
+  const dynamicRows = apiData.map((courseInfo, index) => ({
+    name: courseInfo.Professor?.Name || '',
+    course: courseInfo.Professor?.Course || '',
+    difficulty: courseInfo.Professor?.Difficulty || 0,
+    rating: courseInfo.Professor?.Rating || 0,
+    wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] || 0,
+    gpaTerm1: courseInfo.GPA?.['SPRING 2022'] || 0,
+    gpaTerm2: courseInfo.GPA?.['SPRING 2023'] || 0,
+    gpaTerm3: courseInfo.GPA?.['SUMMER 2022'] || 0,
+    aPercentage: courseInfo.GradesPercentage?.A || 0,
+    bPercentage: courseInfo.GradesPercentage?.B || 0,
+    cPercentage: courseInfo.GradesPercentage?.C || 0,
+    dPercentage: courseInfo.GradesPercentage?.D || 0,
+    fPercentage: courseInfo.GradesPercentage?.F || 0,
+    numRatings: courseInfo.Professor?.Num_Ratings || 0,
+  }));
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -220,23 +191,21 @@ function EnhancedTable() {
               onRequestSort={handleRequestSort}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.id}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    {headCells.map((cell) => (
-                      <TableCell key={cell.id} align={cell.numeric ? 'right' : 'left'}>
-                        {row[cell.id]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
+              {dynamicRows.map((row, index) => (
+                <TableRow
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  key={index}
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {headCells.map((cell) => (
+                    <TableCell key={cell.id} align={cell.numeric ? 'right' : 'left'}>
+                      {row[cell.id]}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -244,5 +213,9 @@ function EnhancedTable() {
     </Box>
   );
 }
+
+EnhancedTable.propTypes = {
+  responseData: PropTypes.array,
+};
 
 export default EnhancedTable;

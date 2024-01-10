@@ -5,24 +5,24 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 # Replace these values with your actual database credentials (LOCAL BELOW)
-# dbname = "prof_rec_sample_data"
-# user = "anirudhnukala"
-# password = "sample_data"
-# host = "localhost"
-# port = "5432"
+dbname = "prof_rec_sample_data"
+user = "anirudhnukala"
+password = "sample_data"
+host = "localhost"
+port = "5432"
 
-# # Replace these values with your actual table and column names
-# table_name = "my_table"
-# column_name = "course"
-
-user = os.getenv('PGUSER')  # Railway provides this as 'postgres'
-password = os.getenv('PGPASSWORD')  # Railway provides this password
-host = os.getenv('PGHOST')  # Railway provides this host
-port = os.getenv('PGPORT')  # Railway provides this port
-dbname = os.getenv('PGDATABASE')
-
-table_name = "professor_data"
+# Replace these values with your actual table and column names
+table_name = "my_table"
 column_name = "course"
+
+# user = os.getenv('PGUSER')  # Railway provides this as 'postgres'
+# password = os.getenv('PGPASSWORD')  # Railway provides this password
+# host = os.getenv('PGHOST')  # Railway provides this host
+# port = os.getenv('PGPORT')  # Railway provides this port
+# dbname = os.getenv('PGDATABASE')
+
+# table_name = "professor_data"
+# column_name = "course"
 
 # Establish a connection to the database
 
