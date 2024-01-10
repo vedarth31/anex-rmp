@@ -3,6 +3,7 @@ import './globals.css'
 import Home from './page.js'
 import Form from './components/Form'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import EnhancedTable from './components/EnhancedTable';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,7 +15,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>{children}
-        <Form />
+        {/* <Form /> */}
+        <EnhancedTable />
       </body>
     </html>
   )
