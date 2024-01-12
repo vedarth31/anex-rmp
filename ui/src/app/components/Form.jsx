@@ -141,7 +141,7 @@ export default function Form() {
 
       <br />
 
-      {responseData && formData.profName && (
+      {responseData && formData.classCode && formData.classNum && formData.profName && (
         <div className="results-container">
           {renderCombinedData(responseData)}
         </div>
@@ -153,7 +153,7 @@ export default function Form() {
         </div>
       )}
 
-      {responseData && !formData.profName && (
+      {responseData && formData.classCode && formData.classNum && !formData.profName && (
         <EnhancedTable responseData={responseData} />
       )}
     </div>

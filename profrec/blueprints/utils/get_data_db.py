@@ -5,24 +5,24 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 # Replace these values with your actual database credentials (LOCAL BELOW)
-dbname = "prof_rec_sample_data"
-user = "vedarth"
-password = "sample_data"
-host = "localhost"
-port = "5432"
+# dbname = "prof_rec_sample_data"
+# user = "vedarth"
+# password = "sample_data"
+# host = "localhost"
+# port = "5432"
 
-# Replace these values with your actual table and column names
-table_name = "my_table"
-column_name = "course"
-
-# user = os.getenv('PGUSER')  # Railway provides this as 'postgres'
-# password = os.getenv('PGPASSWORD')  # Railway provides this password
-# host = os.getenv('PGHOST')  # Railway provides this host
-# port = os.getenv('PGPORT')  # Railway provides this port
-# dbname = os.getenv('PGDATABASE')
-
-# table_name = "professor_data"
+# # Replace these values with your actual table and column names
+# table_name = "my_table"
 # column_name = "course"
+
+user = os.getenv('PGUSER')  # Railway provides this as 'postgres'
+password = os.getenv('PGPASSWORD')  # Railway provides this password
+host = os.getenv('PGHOST')  # Railway provides this host
+port = os.getenv('PGPORT')  # Railway provides this port
+dbname = os.getenv('PGDATABASE')
+
+table_name = "professor_data"
+column_name = "course"
 
 # Establish a connection to the database
 
@@ -69,11 +69,11 @@ def get_course_info(user_input):
  	        },
             "Professor": {
                 "Course": row[2],
-                "Difficulty": float(row[15]),
+                "Difficulty": float(row[15]) if row[15] is not None else None,
                 "Name": row[1],
-     	        "Num_Ratings": float(row[17]),
-                "Rating": float(row[14]),
-  	            "Would Take Again": float(row[16])
+     	        "Num_Ratings": float(row[17]) if row[17] is not None else None,
+                "Rating": float(row[14]) if row[14] is not None else None,
+  	            "Would Take Again": float(row[16]) if row[16] is not None else None
       	    }
 	    }
     
@@ -100,9 +100,7 @@ def get_prof_info(user_input):
     )
     
     search_course = f"{user_input['dept']} {user_input['number']}"
-    print(search_course)
     search_prof = user_input['professor']
-    print(search_prof)
     # Create a cursor object to execute SQL queries
     cursor = connection.cursor()
 
@@ -121,7 +119,7 @@ def get_prof_info(user_input):
     cursor.close()
     connection.close()
     
-    print(row)
+    # print(row)
     
     dict = {
         "GPA": {
@@ -150,7 +148,7 @@ def get_prof_info(user_input):
     if row[8] is not None:
         dict["GPA"][row[7]] = float(row[8])
 
-    print(dict)
+    # print(dict)
     return dict
     
 
@@ -168,7 +166,7 @@ def check_data(data):
         return get_course_info(user_input)
     else:
         # return 'getting prof info'
-        print(user_input)
+        # print(user_input)
         return get_prof_info(user_input)
 
 

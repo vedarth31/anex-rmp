@@ -164,6 +164,8 @@ function EnhancedTable({ responseData }) {
     dPercentage: courseInfo.GradesPercentage?.D || 0,
     fPercentage: courseInfo.GradesPercentage?.F || 0,
     numRatings: courseInfo.Professor?.Num_Ratings || 0,
+
+    
   }));
 
   const sortedRows = dynamicRows.sort((a, b) => {
