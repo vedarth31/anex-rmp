@@ -150,22 +150,22 @@ function EnhancedTable({ responseData }) {
   const apiData = JSON.parse(responseData);
   const dynamicRows = apiData.map((courseInfo, index) => ({
     name: courseInfo.Professor?.Name || '',
-    difficulty: courseInfo.Professor?.Difficulty || 0,
-    rating: courseInfo.Professor?.Rating || 0,
-    wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] || 0,
+    difficulty: courseInfo.Professor?.Difficulty || '-',
+    rating: courseInfo.Professor?.Rating || '-',
+    wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] || '-',
     //these GPAs are not properly dynamically loaded in... 
     //leading to incorrect display of data
-    gpaTerm1: courseInfo.GPA?.['SPRING 2022'] || 0,
-    gpaTerm2: courseInfo.GPA?.['SPRING 2023'] || 0,
-    gpaTerm3: courseInfo.GPA?.['SUMMER 2022'] || 0,
+    gpaTerm1: `${(courseInfo.GPA?.['gpa1'] || '-')} ${(courseInfo.GPA?.['sem1'] ? `(${courseInfo.GPA?.['sem1']})` : '')}`,
+    gpaTerm2: `${(courseInfo.GPA?.['gpa2'] || '-')} ${(courseInfo.GPA?.['sem2'] ? `(${courseInfo.GPA?.['sem2']})` : '')}`,
+    gpaTerm3: `${(courseInfo.GPA?.['gpa3'] || '-')} ${(courseInfo.GPA?.['sem3'] ? `(${courseInfo.GPA?.['sem3']})` : '')}`,
     aPercentage: courseInfo.GradesPercentage?.A || 0,
     bPercentage: courseInfo.GradesPercentage?.B || 0,
     cPercentage: courseInfo.GradesPercentage?.C || 0,
     dPercentage: courseInfo.GradesPercentage?.D || 0,
     fPercentage: courseInfo.GradesPercentage?.F || 0,
-    numRatings: courseInfo.Professor?.Num_Ratings || 0,
+    numRatings: courseInfo.Professor?.Num_Ratings || '-',
 
-    
+
   }));
 
   const sortedRows = dynamicRows.sort((a, b) => {

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import './Form.css';
 import EnhancedTable from './EnhancedTable';
+import Loading from "../loading.json"
+import Lottie from "lottie-react"
 
 export default function Form() {
   const initialFormData = {
@@ -15,6 +17,7 @@ export default function Form() {
   const [formData, setFormData] = useState(initialFormData);
   const [responseData, setResponseData] = useState("");
   const [error, setError] = useState("");
+  const [loadingState, setLoadingState] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,6 +26,7 @@ export default function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoadingState(true)
 
     let response;
 
@@ -38,6 +42,7 @@ export default function Form() {
         setResponseData("");
       } else {
         setResponseData(JSON.stringify(response.data, null, 2));
+        setLoadingState(false)
         setError("");
       }
 
@@ -140,6 +145,11 @@ export default function Form() {
       </form>
 
       <br />
+
+      {loadingState &&
+        <p className="loading-animate">
+          <Lottie animationData={Loading} />
+        </p>}
 
       {responseData && formData.classCode && formData.classNum && formData.profName && (
         <div className="results-container">

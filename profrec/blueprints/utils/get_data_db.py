@@ -76,13 +76,19 @@ def get_course_info(user_input):
   	            "Would Take Again": float(row[16]) if row[16] is not None else None
       	    }
 	    }
-    
+
+        if row[3] is not None:
+            dict["GPA"]["sem1"] = row[3]
         if row[4] is not None:
-            dict["GPA"][row[3]] = float(row[4])
+            dict["GPA"]["gpa1"] = float(row[4])
+        if row[5] is not None:
+            dict["GPA"]["sem2"] = row[5]
         if row[6] is not None:
-            dict["GPA"][row[5]] = float(row[6])
+            dict["GPA"]["gpa2"] = float(row[6])
+        if row[7] is not None:
+            dict["GPA"]["sem3"] = row[7]
         if row[8] is not None:
-            dict["GPA"][row[7]] = float(row[8])
+            dict["GPA"]["gpa3"] = float(row[8])
     
         courses.append(dict)
     
