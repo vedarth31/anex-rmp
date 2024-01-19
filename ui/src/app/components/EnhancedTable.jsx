@@ -148,6 +148,9 @@ function EnhancedTable({ responseData }) {
   };
 
   const apiData = JSON.parse(responseData);
+
+  if(!apiData.length) return;
+
   const dynamicRows = apiData.map((courseInfo, index) => ({
     name: courseInfo.Professor?.Name || '',
     difficulty: courseInfo.Professor?.Difficulty || '-',

@@ -20,18 +20,19 @@ export default function Form() {
   const [loadingState, setLoadingState] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoadingState(true)
-
-    let response;
+    setLoadingState(true);
 
     try {
-      response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
+      const response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
         dept: formData.classCode,
         number: formData.classNum,
         professor: formData.profName,
@@ -42,13 +43,13 @@ export default function Form() {
         setResponseData("");
       } else {
         setResponseData(JSON.stringify(response.data, null, 2));
-        setLoadingState(false)
         setError("");
       }
-
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("The requested data has not been found, please try again");
+    } finally {
+      setLoadingState(false);
     }
   };
 
@@ -60,8 +61,9 @@ export default function Form() {
 
   const renderCombinedData = (data) => {
     const { Professor, GPA, GradesPercentage } = JSON.parse(data);
-    console.log("renderCombinedData", data);
 
+    if(!Professor || !GPA || !GradesPercentage) return;
+    
     return (
       <div>
         <div>
@@ -139,9 +141,6 @@ export default function Form() {
         <div className="buttons mt-4">
           <button type="submit" className="btn btn-primary">Submit</button>
         </div>
-        <div className="mt-4">
-          <button type="button" className="btn btn-danger" onClick={handleReset}>Reset</button>
-        </div>
       </form>
 
       <br />
@@ -151,9 +150,16 @@ export default function Form() {
           <Lottie animationData={Loading} />
         </p>}
 
-      {responseData && formData.classCode && formData.classNum && formData.profName && (
+      {responseData && formData.classCode && formData.classNum && (
         <div className="results-container">
-          {renderCombinedData(responseData)}
+          {formData.profName === undefined || formData.profName.trim() === '' ? (
+            <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '100px' }}>
+            <EnhancedTable responseData={responseData} />
+          </div>
+          
+          ) : (
+            renderCombinedData(responseData)
+          )}
         </div>
       )}
 
@@ -161,10 +167,6 @@ export default function Form() {
         <div className="error-message">
           <p>{error}</p>
         </div>
-      )}
-
-      {responseData && formData.classCode && formData.classNum && !formData.profName && (
-        <EnhancedTable responseData={responseData} />
       )}
     </div>
   );
