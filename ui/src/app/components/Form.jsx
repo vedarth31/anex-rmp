@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import './Form.css';
 import EnhancedTable from './EnhancedTable';
+import SingleProf from './SingleProf'
 import Loading from "../loading.json"
 import Lottie from "lottie-react"
 
@@ -40,7 +41,7 @@ export default function Form() {
 
       if (!response.data || Object.keys(response.data).length === 0) {
         setError("Invalid data entered. Please check your inputs.");
-        setResponseData("");
+        // setResponseData("");
       } else {
         setResponseData(JSON.stringify(response.data, null, 2));
         setError("");
@@ -51,51 +52,6 @@ export default function Form() {
     } finally {
       setLoadingState(false);
     }
-  };
-
-  const handleReset = () => {
-    setFormData(initialFormData);
-    setResponseData("");
-    setError("");
-  };
-
-  const renderCombinedData = (data) => {
-    const { Professor, GPA, GradesPercentage } = JSON.parse(data);
-
-    if(!Professor || !GPA || !GradesPercentage) return;
-    
-    return (
-      <div>
-        <div>
-          <b>In recent semesters, {Professor.Name} had average GPAs of: </b>
-          <ul>
-            {Object.entries(GPA).map(([semester, gpa]) => (
-              <li key={semester}>{`${semester}: ${gpa}`}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <b>In these semesters, students had an average grade distribution of: </b>
-          <ul>
-            {Object.entries(GradesPercentage).map(([grade, percentage]) => (
-              <li key={grade}>{`${grade}: ${percentage}%`}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          {Professor["RMP_data"] === "N/A" ? (
-            <p>Sorry, we were unable to retrieve this professor's RMP data.</p>
-          ) : (
-            <>
-              <p><b>{`${Professor["Num_Ratings"]} students on Rate my Professor have stated that`}:</b></p>
-              <p>{`Difficulty: ${Professor["Difficulty"]}/5`}</p>
-              <p>{`Rating: ${Professor.Rating}/5`}</p>
-              <p>{`${Professor["Would Take Again"]}% would take again.`}</p>
-            </>
-          )}
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -158,7 +114,8 @@ export default function Form() {
           </div>
           
           ) : (
-            renderCombinedData(responseData)
+            <SingleProf data={responseData} />
+            // renderCombinedData(responseData)
           )}
         </div>
       )}
