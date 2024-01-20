@@ -149,7 +149,7 @@ function EnhancedTable({ responseData }) {
 
   const apiData = JSON.parse(responseData);
 
-  if(!apiData.length) return;
+  if (!apiData.length) return;
 
   const dynamicRows = apiData.map((courseInfo, index) => ({
     name: courseInfo.Professor?.Name || '',
@@ -185,8 +185,9 @@ function EnhancedTable({ responseData }) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer>
+        <TableContainer sx={{ maxHeight: '70vh' }}>
           <Table
+            stickyHeader
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size="medium"

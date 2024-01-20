@@ -1,14 +1,15 @@
 import React from 'react'
+import './SingleProf.css'
 
 const SingleProf = ({ data }) => {
 
     const { Professor, GPA, GradesPercentage } = JSON.parse(data);
-    if (!Professor || !GPA || !GradesPercentage) {
-        return;
-    }
+    // if (!Professor || !GPA || !GradesPercentage) {
+    //     return;
+    // }
 
     return (
-        <div>
+        <div className="prof-container">
             <div>
                 <b>In recent semesters, {Professor.Name} had average GPAs of: </b>
                 <ul>

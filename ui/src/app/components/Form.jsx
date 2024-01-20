@@ -33,7 +33,8 @@ export default function Form() {
     e.preventDefault();
     setError("");
     setLoadingState(true);
-    setFormSubmitted(true)
+    setResponseData("");
+    setFormSubmitted(true);
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
@@ -44,7 +45,6 @@ export default function Form() {
 
       if (!response.data || Object.keys(response.data).length === 0) {
         setError("Invalid data entered. Please check your inputs.");
-        // setResponseData("");
       } else {
         setResponseData(JSON.stringify(response.data, null, 2));
         setError("");
@@ -112,17 +112,16 @@ export default function Form() {
       {responseData && formData.classCode && formData.classNum && formSubmitted && (
         <div className="results-container">
           {formData.profName === undefined || formData.profName.trim() === '' ? (
-            <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '100px' }}>
-            <EnhancedTable responseData={responseData} />
-          </div>
-          
+            <div className="table">
+              <EnhancedTable responseData={responseData} />
+            </div>
           ) : (
             <SingleProf data={responseData} />
           )}
         </div>
       )}
 
-      {error && formSubmitted &&(
+      {error && formSubmitted && (
         <div className="error-message">
           <p>{error}</p>
         </div>
