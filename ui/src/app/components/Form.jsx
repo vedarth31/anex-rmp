@@ -19,18 +19,21 @@ export default function Form() {
   const [responseData, setResponseData] = useState("");
   const [error, setError] = useState("");
   const [loadingState, setLoadingState] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [e.target.name]: e.target.value,
     }));
+    setFormSubmitted(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoadingState(true);
+    setFormSubmitted(true)
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
@@ -101,12 +104,12 @@ export default function Form() {
 
       <br />
 
-      {loadingState &&
+      {loadingState && formSubmitted &&
         <p className="loading-animate">
           <Lottie animationData={Loading} />
         </p>}
 
-      {responseData && formData.classCode && formData.classNum && (
+      {responseData && formData.classCode && formData.classNum && formSubmitted && (
         <div className="results-container">
           {formData.profName === undefined || formData.profName.trim() === '' ? (
             <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '100px' }}>
@@ -115,12 +118,11 @@ export default function Form() {
           
           ) : (
             <SingleProf data={responseData} />
-            // renderCombinedData(responseData)
           )}
         </div>
       )}
 
-      {error && (
+      {error && formSubmitted &&(
         <div className="error-message">
           <p>{error}</p>
         </div>
