@@ -39,7 +39,6 @@ export default function Form() {
     setLoadingState(true);
     setResponseData("");
     setFormSubmitted(true);
-    setInfoState(true);
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
