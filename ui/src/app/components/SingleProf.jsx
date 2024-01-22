@@ -4,10 +4,7 @@ import './SingleProf.css'
 const SingleProf = ({ data }) => {
 
     const { Professor, GPA, GradesPercentage } = JSON.parse(data);
-    // if (!Professor || !GPA || !GradesPercentage) {
-    //     return;
-    // }
-
+    
     return (
         <div className="prof-container">
             <div>

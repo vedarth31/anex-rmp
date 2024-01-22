@@ -1,7 +1,7 @@
 .main {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     /* background-image: ; */
 }
@@ -16,9 +16,10 @@
     color: #500000;
 }
 
-.results-container {
-    margin-top: 24px;
-    margin-left: 100px;
+.button-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
 }
 
 .loading-animate {
@@ -26,5 +27,7 @@
 }
 
 .table {
-    padding-right: 100px;
+    margin-top: 2vw;
+    padding-right: 5vw;
+    padding-left: 5vw;
 }

@@ -181,7 +181,7 @@ function EnhancedTable({ responseData }) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer sx={{ maxHeight: '70vh' }}>
+        <TableContainer sx={{ maxHeight: '65vh' }}>
           <Table
             stickyHeader
             sx={{ minWidth: 750 }}

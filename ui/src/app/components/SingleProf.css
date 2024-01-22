@@ -1,4 +1,8 @@
 .prof-container {
     border: 3px solid #500000;
     padding: 20px;
+    margin-top: 2rem;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
 }

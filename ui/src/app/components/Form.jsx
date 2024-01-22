@@ -10,7 +10,7 @@ import Lottie from "lottie-react"
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-
+import Info from './Info'
 
 export default function Form() {
   const initialFormData = {
@@ -39,6 +39,7 @@ export default function Form() {
     setLoadingState(true);
     setResponseData("");
     setFormSubmitted(true);
+    setInfoState(true);
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get_course_info', {
@@ -72,42 +73,6 @@ export default function Form() {
   return (
     <div className="main">
       <form className="container mt-5" onSubmit={handleSubmit} /*style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}*/>
-        {/* <div className="form-group">
-          <label htmlFor="classCode">4 Letter Class Code:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="classCode"
-            name="classCode"
-            value={formData.classCode}
-            onChange={handleChange}
-          />
-        </div> */}
-
-        {/* <div className="form-group">
-          <label htmlFor="classNum">3 Digit Class Number:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="classNum"
-            name="classNum"
-            value={formData.classNum}
-            onChange={handleChange}
-          />
-        </div> */}
-
-        {/* <div className="form-group">
-          <label htmlFor="profName">Professor Name:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="profName"
-            name="profName"
-            value={formData.profName}
-            onChange={handleChange}
-            placeholder="Optional"
-          />
-        </div> */}
 
         <ThemeProvider theme={theme}>
           <TextField
@@ -118,9 +83,7 @@ export default function Form() {
             value={formData.classCode}
             onChange={handleChange}
           />
-        </ThemeProvider>
 
-        <ThemeProvider theme={theme}>
           <TextField
             id="outlined-class-number"
             label="Class Number"
@@ -129,9 +92,7 @@ export default function Form() {
             value={formData.classNum}
             onChange={handleChange}
           />
-        </ThemeProvider>
 
-        <ThemeProvider theme={theme}>
           <TextField
             id="outlined-professor"
             label="Professor (optional)"
@@ -140,21 +101,20 @@ export default function Form() {
             value={formData.profName}
             onChange={handleChange}
           />
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
 
-        <div className="div">
-          <ThemeProvider theme={theme}>
-            <Button className="button-submit" type="submit" variant="contained">Submit</Button>
-          </ThemeProvider>
+        <div className="button-container">
+          {/* <ThemeProvider theme={theme}> */}
+            <Button className="button-submit" type="submit" variant="contained" size="large">Submit</Button>
+          {/* </ThemeProvider> */}
         </div>
+        </ThemeProvider>
       </form>
 
-      <br />
-
       {loadingState && formSubmitted &&
-        <p className="loading-animate">
+        <div className="loading-animate">
           <Lottie animationData={Loading} />
-        </p>}
+        </div>}
 
       {responseData && formData.classCode && formData.classNum && formSubmitted && (
         <div className="results-container">
@@ -173,6 +133,13 @@ export default function Form() {
           <p>{error}</p>
         </div>
       )}
+
+      {!formSubmitted && (
+        <div>
+          <Info />
+        </div>
+      )}
+
     </div>
   );
 }
