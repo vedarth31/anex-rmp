@@ -4,7 +4,6 @@ import React from 'react';
 
 const Footer = () => {
   const footerStyle = {
-    padding: '10px',
     paddingTop: '100px',
     textAlign: 'center',
     position: 'fixed',
@@ -13,7 +12,7 @@ const Footer = () => {
   };
 
   const copyrightStyle = {
-    fontSize: '20px',
+    fontSize: '15px',
     color: "gray",  
   };
 
