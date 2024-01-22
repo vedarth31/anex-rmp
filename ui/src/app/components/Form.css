@@ -3,6 +3,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* background-image: ; */
+}
+
+.button-submit {
+    /* background-color: #500000; */
+    color: white;
+}
+
+.button-submit:hover {
+    background-color: white;
+    color: #500000;
 }
 
 .results-container {

@@ -7,6 +7,10 @@ import EnhancedTable from './EnhancedTable';
 import SingleProf from './SingleProf'
 import Loading from "../loading.json"
 import Lottie from "lottie-react"
+import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+
 
 export default function Form() {
   const initialFormData = {
@@ -57,10 +61,18 @@ export default function Form() {
     }
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#500000",
+      }
+    },
+  });
+
   return (
     <div className="main">
-      <form className="container mt-5" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <div className="form-group">
+      <form className="container mt-5" onSubmit={handleSubmit} /*style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}*/>
+        {/* <div className="form-group">
           <label htmlFor="classCode">4 Letter Class Code:</label>
           <input
             type="text"
@@ -70,9 +82,9 @@ export default function Form() {
             value={formData.classCode}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="classNum">3 Digit Class Number:</label>
           <input
             type="text"
@@ -82,9 +94,9 @@ export default function Form() {
             value={formData.classNum}
             onChange={handleChange}
           />
-        </div>
+        </div> */}
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="profName">Professor Name:</label>
           <input
             type="text"
@@ -95,10 +107,45 @@ export default function Form() {
             onChange={handleChange}
             placeholder="Optional"
           />
-        </div>
+        </div> */}
 
-        <div className="buttons mt-4">
-          <button type="submit" className="btn btn-primary">Submit</button>
+        <ThemeProvider theme={theme}>
+          <TextField
+            id="outlined-department"
+            label="Department"
+            variant="outlined"
+            name="classCode"
+            value={formData.classCode}
+            onChange={handleChange}
+          />
+        </ThemeProvider>
+
+        <ThemeProvider theme={theme}>
+          <TextField
+            id="outlined-class-number"
+            label="Class Number"
+            variant="outlined"
+            name="classNum"
+            value={formData.classNum}
+            onChange={handleChange}
+          />
+        </ThemeProvider>
+
+        <ThemeProvider theme={theme}>
+          <TextField
+            id="outlined-professor"
+            label="Professor (optional)"
+            variant="outlined"
+            name="profName"
+            value={formData.profName}
+            onChange={handleChange}
+          />
+        </ThemeProvider>
+
+        <div className="div">
+          <ThemeProvider theme={theme}>
+            <Button className="button-submit" type="submit" variant="contained">Submit</Button>
+          </ThemeProvider>
         </div>
       </form>
 

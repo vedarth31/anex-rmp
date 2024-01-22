@@ -33,7 +33,7 @@ const headCells = [
   {
     id: 'wouldTakeAgain',
     numeric: true,
-    label: 'Would Take Again (%)',
+    label: 'Would Take Again',
   },
   {
     id: 'gpaTerm1',
@@ -53,27 +53,27 @@ const headCells = [
   {
     id: 'aPercentage',
     numeric: true,
-    label: 'A (%)',
+    label: 'A',
   },
   {
     id: 'bPercentage',
     numeric: true,
-    label: 'B (%)',
+    label: 'B',
   },
   {
     id: 'cPercentage',
     numeric: true,
-    label: 'C (%)',
+    label: 'C',
   },
   {
     id: 'dPercentage',
     numeric: true,
-    label: 'D (%)',
+    label: 'D',
   },
   {
     id: 'fPercentage',
     numeric: true,
-    label: 'F (%)',
+    label: 'F',
   },
   {
     id: 'numRatings',
@@ -155,20 +155,16 @@ function EnhancedTable({ responseData }) {
     name: courseInfo.Professor?.Name || '',
     difficulty: courseInfo.Professor?.Difficulty || '-',
     rating: courseInfo.Professor?.Rating || '-',
-    wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] || '-',
-    //these GPAs are not properly dynamically loaded in... 
-    //leading to incorrect display of data
+    wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] ? `${Math.round(courseInfo.Professor?.['Would Take Again'])}%` : '-',
     gpaTerm1: `${(courseInfo.GPA?.['gpa1'] || '-')} ${(courseInfo.GPA?.['sem1'] ? `(${courseInfo.GPA?.['sem1']})` : '')}`,
     gpaTerm2: `${(courseInfo.GPA?.['gpa2'] || '-')} ${(courseInfo.GPA?.['sem2'] ? `(${courseInfo.GPA?.['sem2']})` : '')}`,
     gpaTerm3: `${(courseInfo.GPA?.['gpa3'] || '-')} ${(courseInfo.GPA?.['sem3'] ? `(${courseInfo.GPA?.['sem3']})` : '')}`,
-    aPercentage: courseInfo.GradesPercentage?.A || 0,
-    bPercentage: courseInfo.GradesPercentage?.B || 0,
-    cPercentage: courseInfo.GradesPercentage?.C || 0,
-    dPercentage: courseInfo.GradesPercentage?.D || 0,
-    fPercentage: courseInfo.GradesPercentage?.F || 0,
+    aPercentage: `${Math.round(courseInfo.GradesPercentage?.A)}%` || '-',
+    bPercentage: `${Math.round(courseInfo.GradesPercentage?.B)}%` || '-',
+    cPercentage: `${Math.round(courseInfo.GradesPercentage?.C)}%` || '-',
+    dPercentage: `${Math.round(courseInfo.GradesPercentage?.D)}%`|| '-',
+    fPercentage: `${Math.round(courseInfo.GradesPercentage?.F)}%` || '-',
     numRatings: courseInfo.Professor?.Num_Ratings || '-',
-
-
   }));
 
   const sortedRows = dynamicRows.sort((a, b) => {

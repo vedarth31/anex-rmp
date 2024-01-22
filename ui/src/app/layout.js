@@ -2,8 +2,9 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Home from './page.js'
 import Form from './components/Form'
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import EnhancedTable from './components/EnhancedTable';
+import '@mui/material'
 
 const inter = Inter({ subsets: ['latin'] })
 
