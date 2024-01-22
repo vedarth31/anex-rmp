@@ -7,6 +7,7 @@ import Info from './components/Info'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import EnhancedTable from './components/EnhancedTable';
 import '@mui/material'
+import Footer from './components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
         <Header />
         <Form />
       </body>
+      <Footer />
     </html>
   )
 }
