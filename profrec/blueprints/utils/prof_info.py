@@ -1,4 +1,4 @@
-import requests, ratemyprofessor, logging, aiohttp, asyncio
+import ratemyprofessor, logging, aiohttp, asyncio
 from concurrent.futures import ThreadPoolExecutor
 from json import loads
 

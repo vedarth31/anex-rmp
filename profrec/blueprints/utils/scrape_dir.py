@@ -1,6 +1,5 @@
 import requests, logging
 from bs4 import BeautifulSoup
-from requests.exceptions import ReadTimeout
     
 def get_professor_profiles(last_name, first_name, dept):
     base_url = "https://directory.tamu.edu"
