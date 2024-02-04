@@ -1,16 +1,19 @@
-import requests, ratemyprofessor, logging
+import requests, ratemyprofessor, logging, aiohttp, asyncio
+from concurrent.futures import ThreadPoolExecutor
 from json import loads
 
 url = "https://anex.us/grades/getData/"
 
 logging.basicConfig(level=logging.INFO)
 
+executor = ThreadPoolExecutor()
+
 def changeProfName(old_name):
     try:
         name_list = old_name.split()
         new_name = name_list[1] + " " + name_list[0][0]
         return new_name.upper()
-    except: 
+    except:
         return False
     
 def parseData(data, prof_input):
@@ -64,12 +67,12 @@ def percent_letter_grades(data, semester):
     
     return [round(grade/total_students * 100, 2) for grade in grades]
 
-def get_professor_info(user_input):
-
+async def get_professor_info(user_input):
+    loop = asyncio.get_running_loop()
     prof_name = user_input['professor']
 
-    professor = ratemyprofessor.get_professor_by_school_and_name(
-        ratemyprofessor.get_school_by_name("Texas A&M University"), prof_name)
+    professor = await loop.run_in_executor(executor, lambda: ratemyprofessor.get_professor_by_school_and_name(
+        ratemyprofessor.get_school_by_name("Texas A&M University"), prof_name))
 
     if professor is not None:
         if (professor.school.name == "Texas A&M University" or professor.school.name == "Texas A&M University at College Station"):
@@ -81,12 +84,12 @@ def get_professor_info(user_input):
             }
             return response_data
         else:
-            logging.error("Could not find professor")
+            # logging.error("Could not find professor")
             return False
     else:
         return {"error": "Professor not found"}
 
-def outputData(data, userInput):
+async def outputData(data, userInput):
     
     parsed_data = parseData(data, userInput['professor'])
     
@@ -125,9 +128,7 @@ def outputData(data, userInput):
     output_dict["GradesPercentage"]["F"] = f"{averages[4]}"
     
     
-    prof_info = get_professor_info(userInput)
-    
-    logging.info(f"results: {prof_info}")
+    prof_info = await get_professor_info(userInput)
     
     if(not prof_info):
         # logging.error("N/A")
@@ -143,19 +144,27 @@ def outputData(data, userInput):
 
 
 
-def process(inputString):
-    # Important - converts stringified Json to actual Json object
+async def process(session, inputString):
     userInput = loads(inputString)
     try:
-        response = requests.post(url, data=userInput)
-        subjectGrades = response.json()
-        
-        if response.status_code == 200:
-            return outputData(subjectGrades, userInput)
-        else:
-            logging.error(f"Failed to retrieve data. Status code: {response.reason}")
-
-    except requests.exceptions.RequestException as e:
+        async with session.post(url, data=userInput) as response:
+            response_text = await response.text()
+            if response.status == 200:
+                try:
+                    # Attempt to parse the response text as JSON
+                    subjectGrades = loads(response_text)
+                    return await outputData(subjectGrades, userInput)
+                except Exception as json_error:
+                    logging.error(f"JSON parsing error: {json_error}")
+                    return {"error": f"JSON parsing error: {json_error}"}
+            else:
+                logging.error(f"Failed to retrieve data. Status code: {response.status}, Response: {response_text}")
+                return {"error": f"Failed to retrieve data. Status code: {response.status}, Response: {response_text}"}
+    except Exception as e:
         logging.error(f"Request failed: {e}")
-    except:
-        return {}
+        return {"error": str(e)}
+        
+async def handle_multiple_user_inputs(user_inputs):
+    async with aiohttp.ClientSession() as session:
+        tasks = [asyncio.create_task(process(session, user_input)) for user_input in user_inputs]
+        return await asyncio.gather(*tasks)

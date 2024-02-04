@@ -31,7 +31,6 @@ def get_info():
 @apis.route('/update-db', methods = ['GET'])
 def test():
     try:
-        logging.info("Updating database")
         return update()
     except Exception as e:
         logging.error(f"Error in /update-db: {e}")
@@ -39,5 +38,4 @@ def test():
 
 @apis.route('/test', methods=['GET'])
 def trial():
-    logging.info("Test endpoint reached")
     return 'Test endpoint reached', 200
