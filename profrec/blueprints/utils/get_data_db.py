@@ -26,6 +26,22 @@ column_name = "course"
 
 # Establish a connection to the database
 
+def modify_sem(sem):
+    sem_list = sem.split()
+    season = sem_list[0]
+    year = sem_list[1][2:]
+    
+    if(season == "SPRING"):
+        season = "SPR"
+    elif(season == "FALL"):
+        season = "FALL"
+    elif(season == "SUMMER"):
+        season = "SUM"
+    
+    return f"{season} \'{year}"
+    
+     
+
 
 def get_course_info(user_input):
     
@@ -78,15 +94,15 @@ def get_course_info(user_input):
 	    }
 
         if row[3] is not None:
-            dict["GPA"]["sem1"] = row[3]
+            dict["GPA"]["sem1"] = modify_sem(row[3])
         if row[4] is not None:
             dict["GPA"]["gpa1"] = float(row[4])
         if row[5] is not None:
-            dict["GPA"]["sem2"] = row[5]
+            dict["GPA"]["sem2"] = modify_sem(row[5])
         if row[6] is not None:
             dict["GPA"]["gpa2"] = float(row[6])
         if row[7] is not None:
-            dict["GPA"]["sem3"] = row[7]
+            dict["GPA"]["sem3"] = modify_sem(row[7])
         if row[8] is not None:
             dict["GPA"]["gpa3"] = float(row[8])
     

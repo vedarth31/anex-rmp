@@ -25,7 +25,7 @@ const SingleProf = ({ data }) => {
             </div>
             <div>
                 {Professor["RMP_data"] === "N/A" ? (
-                    <p>Sorry, we were unable to retrieve this professor's RMP data.</p>
+                    <p>Sorry, we were unable to retrieve this professor&apos;s RMP data.</p>
                 ) : (
                     <>
                         <p><b>{`${Professor["Num_Ratings"]} students on Rate my Professor have stated that`}:</b></p>
