@@ -127,14 +127,14 @@ def get_prof_info(user_input):
     cursor = connection.cursor()
 
     # Build the SQL query to select data based on the column
-    query = sql.SQL("SELECT * FROM {} WHERE {} = %s AND {} = %s;").format(
+    query = sql.SQL("SELECT * FROM {} WHERE {} = %s AND {} LIKE %s;").format(
         sql.Identifier(table_name),
         sql.Identifier("course"),
         sql.Identifier("professor")
     )
 
     # Execute the query with the specified search value
-    cursor.execute(query, (search_course, search_prof))
+    cursor.execute(query, (search_course, f'%{search_prof}%'))
 
     # Fetch all the results
     row = cursor.fetchone()

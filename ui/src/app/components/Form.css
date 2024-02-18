@@ -31,3 +31,10 @@
     padding-right: 5vw;
     padding-left: 5vw;
 }
+
+.query {
+    display: flex;
+    /* flex-direction: column; */
+    gap: 1rem; /* Adjust this value as needed to control the spacing */
+}
+  

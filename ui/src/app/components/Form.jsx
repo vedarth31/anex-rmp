@@ -41,7 +41,7 @@ export default function Form() {
     setFormSubmitted(true);
 
     try {
-      const response = await axios.post('https://prof-rec-production.up.railway.app/api/get_course_info', {
+      const response = await axios.post('https://prof-rec.vercel.app', {
         dept: formData.classCode,
         number: formData.classNum,
         professor: formData.profName,
@@ -72,73 +72,83 @@ export default function Form() {
   return (
     <div className="main">
       <form className="container mt-5" onSubmit={handleSubmit} /*style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}*/>
-
         <ThemeProvider theme={theme}>
-          <TextField
-            id="outlined-department"
-            label="Department"
-            variant="outlined"
-            name="classCode"
-            value={formData.classCode}
-            onChange={handleChange}
-          />
+          <div className="query">
 
-          <TextField
-            id="outlined-class-number"
-            label="Class Number"
-            variant="outlined"
-            name="classNum"
-            value={formData.classNum}
-            onChange={handleChange}
-          />
+            <TextField
+              id="outlined-department"
+              label="Department"
+              variant="outlined"
+              name="classCode"
+              value={formData.classCode}
+              onChange={handleChange}
+            />
 
-          <TextField
-            id="outlined-professor"
-            label="Professor (optional)"
-            variant="outlined"
-            name="profName"
-            value={formData.profName}
-            onChange={handleChange}
-          />
-        {/* </ThemeProvider> */}
+            <TextField
+              id="outlined-class-number"
+              label="Class Number"
+              variant="outlined"
+              name="classNum"
+              value={formData.classNum}
+              onChange={handleChange}
+            />
 
-        <div className="button-container">
-          {/* <ThemeProvider theme={theme}> */}
-            <Button className="button-submit" type="submit" variant="contained" size="large">Submit</Button>
+            <TextField
+              id="outlined-professor"
+              label="Professor (optional)"
+              variant="outlined"
+              name="profName"
+              value={formData.profName}
+              onChange={handleChange}
+            />
+          </ div>
           {/* </ThemeProvider> */}
-        </div>
+
+          <div className="button-container">
+            {/* <ThemeProvider theme={theme}> */}
+            <Button className="button-submit" type="submit" variant="contained" size="large">Submit</Button>
+            {/* </ThemeProvider> */}
+          </div>
         </ThemeProvider>
       </form>
 
-      {loadingState && formSubmitted &&
+      {
+        loadingState && formSubmitted &&
         <div className="loading-animate">
           <Lottie animationData={Loading} />
-        </div>}
-
-      {responseData && formData.classCode && formData.classNum && formSubmitted && (
-        <div className="results-container">
-          {formData.profName === undefined || formData.profName.trim() === '' ? (
-            <div className="table">
-              <EnhancedTable responseData={responseData} />
-            </div>
-          ) : (
-            <SingleProf data={responseData} />
-          )}
         </div>
-      )}
+      }
 
-      {error && formSubmitted && (
-        <div className="error-message">
-          <p>{error}</p>
-        </div>
-      )}
+      {
+        responseData && formData.classCode && formData.classNum && formSubmitted && (
+          <div className="results-container">
+            {formData.profName === undefined || formData.profName.trim() === '' ? (
+              <div className="table">
+                <EnhancedTable responseData={responseData} />
+              </div>
+            ) : (
+              <SingleProf data={responseData} />
+            )}
+          </div>
+        )
+      }
 
-      {!formSubmitted && (
-        <div>
-          <Info />
-        </div>
-      )}
+      {
+        error && formSubmitted && (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        )
+      }
 
-    </div>
+      {
+        !formSubmitted && (
+          <div>
+            <Info />
+          </div>
+        )
+      }
+
+    </div >
   );
 }

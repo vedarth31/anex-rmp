@@ -98,11 +98,18 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{ textAlign: 'center' }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+            // sx={{
+            //   textAlign: 'right',
+            //   '&:hover': {
+            //     color: 'inherit',
+            //   },
+            // }}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -117,6 +124,8 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
+
+
 
 EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
@@ -156,16 +165,21 @@ function EnhancedTable({ responseData }) {
     difficulty: courseInfo.Professor?.Difficulty || '-',
     rating: courseInfo.Professor?.Rating || '-',
     wouldTakeAgain: courseInfo.Professor?.['Would Take Again'] ? `${Math.round(courseInfo.Professor?.['Would Take Again'])}%` : '-',
-    gpaTerm1: `${(courseInfo.GPA?.['gpa1'] || '-')} ${(courseInfo.GPA?.['sem1'] ? `(${courseInfo.GPA?.['sem1']})` : '')}`,
-    gpaTerm2: `${(courseInfo.GPA?.['gpa2'] || '-')} ${(courseInfo.GPA?.['sem2'] ? `(${courseInfo.GPA?.['sem2']})` : '')}`,
-    gpaTerm3: `${(courseInfo.GPA?.['gpa3'] || '-')} ${(courseInfo.GPA?.['sem3'] ? `(${courseInfo.GPA?.['sem3']})` : '')}`,
+    // gpaTerm1: `${(courseInfo.GPA?.['gpa1'] || '-')} ${(courseInfo.GPA?.['sem1'] ? `(${courseInfo.GPA?.['sem1']})` : '')}`,
+    // gpaTerm2: `${(courseInfo.GPA?.['gpa2'] || '-')} ${(courseInfo.GPA?.['sem2'] ? `(${courseInfo.GPA?.['sem2']})` : '')}`,
+    // gpaTerm3: `${(courseInfo.GPA?.['gpa3'] || '-')} ${(courseInfo.GPA?.['sem3'] ? `(${courseInfo.GPA?.['sem3']})` : '')}`,
+    gpaTerm1: (courseInfo.GPA?.['gpa1'] || '-') + "###" + (courseInfo.GPA?.['sem1'] ? `(${courseInfo.GPA?.['sem1']})` : ''),
+    gpaTerm2: (courseInfo.GPA?.['gpa2'] || '-') + "###" + (courseInfo.GPA?.['sem2'] ? `(${courseInfo.GPA?.['sem2']})` : ''),
+    gpaTerm3: (courseInfo.GPA?.['gpa3'] || '-') + "###" + (courseInfo.GPA?.['sem3'] ? `(${courseInfo.GPA?.['sem3']})` : ''),
     aPercentage: `${Math.round(courseInfo.GradesPercentage?.A)}%` || '-',
     bPercentage: `${Math.round(courseInfo.GradesPercentage?.B)}%` || '-',
     cPercentage: `${Math.round(courseInfo.GradesPercentage?.C)}%` || '-',
-    dPercentage: `${Math.round(courseInfo.GradesPercentage?.D)}%`|| '-',
+    dPercentage: `${Math.round(courseInfo.GradesPercentage?.D)}%` || '-',
     fPercentage: `${Math.round(courseInfo.GradesPercentage?.F)}%` || '-',
     numRatings: courseInfo.Professor?.Num_Ratings || '-',
   }));
+
+
 
   const sortedRows = dynamicRows.sort((a, b) => {
     const aValue = a[orderBy];
@@ -206,8 +220,11 @@ function EnhancedTable({ responseData }) {
                     <TableCell
                       key={cell.id}
                       align={cell.numeric ? 'right' : 'left'}
+                      style={{ textAlign: 'center' }}
+                      data-content={(typeof row[cell.id] === 'string' ? row[cell.id].replace(/###/g, "\n") : row[cell.id]) || ''} 
+
                     >
-                      {row[cell.id]}
+
                     </TableCell>
                   ))}
                 </TableRow>
