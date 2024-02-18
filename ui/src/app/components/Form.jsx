@@ -41,7 +41,7 @@ export default function Form() {
     setFormSubmitted(true);
 
     try {
-      const response = await axios.post('https://prof-rec.vercel.app', {
+      const response = await axios.post('https://prof-rec.vercel.app/api/get_course_info', {
         dept: formData.classCode,
         number: formData.classNum,
         professor: formData.profName,
